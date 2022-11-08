@@ -5,7 +5,7 @@
 #define  max_line_length 1000
 
 int count = 0;
-
+float* matB, * matC, * matA;
 void LeerMatrizA() {
 	{
 		char const* const filename = "matrixA2500.txt";
@@ -31,39 +31,13 @@ void LeerMatrizA() {
 	}
 }
 
-
-int main(int argc, char* argv[]) {
-
+void GuardarMatrizA() {
 	FILE* fh;
 	char const* const filename = "matrixA2500.txt";
 	char line[500];
-	//Estos valores los debe de ingresar el usuario y hay que hacer validacion
-	int filasA = 50;  
-	int columnasA = 50;
-	int filasB = 50;
-	int columnasB = 50;
+	//float* matA;
 
-	int total_esperado = filasA * columnasB;
-
-	float* B, * C, * A;
-
-	//Checar que se puedan multiplicar las matrices
-	if (columnasA != filasB) {
-		printf("\n matrices no se pueden multiplicar, intente denuevo");
-	}
-
-	//Leer la matriz A para contar cuantos valores tiene
-	LeerMatrizA();
-	printf("total num: %i", count);
-
-	//Checar que los tamanos coincidan
-	if (total_esperado != count) {
-		printf("\n total de valores en el archivo no coincide con tamaño de la matriz");
-	}
-	
-	A = (float*)malloc(sizeof(float) * count);
-
-	//*************************************************************************************************
+	matA = (float*)malloc(sizeof(float) * count);
 
 	fopen_s(&fh, filename, "r");
 
@@ -76,15 +50,49 @@ int main(int argc, char* argv[]) {
 	float valor_convertido2 = 0.0;
 	while (fgets(line, sizeof(line), fh)) {
 		valor_convertido2 = atof(line);
-		A[i] = valor_convertido2;
+		matA[i] = valor_convertido2;
 		i++;
 	}
 
-	for (int j = 0; j < count; j++) {
-		printf("\n %.11f ", A[j]);
+	fclose(fh);
+
+}
+
+int main(int argc, char* argv[]) {
+
+	
+	//Estos valores los debe de ingresar el usuario y hay que hacer validacion
+	int filasA = 50;  
+	int columnasA = 50;
+	int filasB = 50;
+	int columnasB = 50;
+
+	int total_esperado = filasA * columnasB;
+
+	//float* matB, * matC, * matA;
+
+	//Checar que se puedan multiplicar las matrices
+	if (columnasA != filasB) {
+		printf("\n matrices no se pueden multiplicar, intente denuevo");
 	}
 
-	fclose(fh);
+	//Leer la matriz A para contar cuantos valores tiene
+	LeerMatrizA();
+	printf("total num: %i", count);
+
+	//Checar que los tamanos coincidan
+	if (total_esperado != count) {
+		printf("\n total de valores en el archivo no coincide con tamaÃ±o de la matriz");
+	}
+	
+
+	//Guardar valores del txt en matriz A
+	GuardarMatrizA();
+
+	for (int j = 0; j < count; j++) {
+		printf("\n %.11f ", matA[j]);
+	}
+
 	return 0;
 }
 
