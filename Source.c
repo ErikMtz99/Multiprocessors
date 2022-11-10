@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 	int tam_matB = filasB * columnasB;
 	int tam_matC = filasA * columnasB;
 
-	float* arrayB, * arrayC, * arrayA;
+	float* arrayB, * traspB, * arrayC, * arrayA;
 
 	//Checar que se puedan multiplicar las matrices
 	if (columnasA != filasB) {
@@ -102,8 +102,8 @@ int main(int argc, char* argv[]) {
 	//Asignar memoria dinamica a arrays
 	arrayA = (float*)malloc(sizeof(float) * count);
 	arrayB = (float*)malloc(sizeof(float) * count2);
+	traspB = (float*)malloc(sizeof(float) * count2);
 	arrayC = (float*)malloc(sizeof(float) * tam_matC);
-
 
 	//*************************************************************************************************
 	//********************* Guardar valores de .txt en array matA *************************************
@@ -144,20 +144,43 @@ int main(int argc, char* argv[]) {
 	fclose(fh2);
 	//*************************************************************************************************
 
-	//imprimir valores de array matA para comprobar que se guardaron bien.
-	//for (int j = 0; j < count; j++) {
-	//	printf("\n %.11f ", arrayA[j]);
-	//}
+	//Trasponer el arreglo B (matriz B)
+	//Para trasponer solo hay que reacomodar los valores
+	i = 0;
+	for (int x = 0; x < columnasB; x++) {
+		for (int y = 0; y < filasB; y++) {
+			traspB[i] = arrayB[x + (columnasB * y)];
+			i++;
+		}
+	}
 
-	//imprimir valores de array matB para comprobar que se guardaron bien.
-	//for (int j = 0; j < count; j++) {
-	//	printf("\n %.11f ", arrayB[j]);
-	//}
+	//imprimir valores de arrayB traspuesta para comprobar que se guardaron bien.
+	for (int j = 0; j < count; j++) {
+		printf("\n %.11f ", traspB[j]);
+	}
+
+	//Multiplicacion MatA x MatB filas x filas
+	i = 0;
+	for (int x = 0; x < filasA; x++) {
+		for (int y = 0; y < columnasB; y++) {
+			arrayC[i] = 0;
+			for (int z = 0; z < filasB; z++) {
+				arrayC[i] += arrayA[z + (x*filasB)] * traspB[z + (y*columnasB)]; //corregir esta linea 
+			}
+			i++;
+		}
+	}
+
+	//imprimir valores de arrayB traspuesta para comprobar que se guardaron bien.
+	for (int j = 0; j < tam_matC; j++) {
+		printf("\n %.11f ", arrayC[j]);
+	}	
 
 	//liberar espacio de memoria del malloc()
 	free(arrayA);
 	free(arrayB);
 	free(arrayC);
+	free(traspB);
 	return 0;
 }
 
